@@ -15,6 +15,9 @@ let score = 0;
 let highScore = localStorage.getItem('flappyEarthHighScore') || 0;
 let lives = 2;
 let gameSpeed = 2;
+const WIN_SCORE = 5; // Score à atteindre pour gagner
+
+console.log('WIN_SCORE initialisé à:', WIN_SCORE);
 
 // Oiseau (Terre)
 const bird = {
@@ -403,24 +406,39 @@ function updateTrees() {
     nextTreeX -= treeConfig.speed * gameSpeed;
 
     // Mettre à jour les arbres existants
-    trees.forEach((tree, index) => {
+    for (let index = 0; index < trees.length; index++) {
+        const tree = trees[index];
         tree.x -= treeConfig.speed * gameSpeed;
 
         // Vérifier si l'oiseau a passé l'arbre
         if (!tree.passed && tree.x + treeConfig.width < bird.x) {
             tree.passed = true;
             score++;
+            console.log('Score incrémenté:', score, 'WIN_SCORE:', WIN_SCORE);
             document.getElementById('score').textContent = score;
+
+            // Vérifier si le joueur a gagné (arrêter immédiatement)
+            if (score >= WIN_SCORE) {
+                console.log('Condition de victoire remplie ! Appel de winGame()');
+                winGame();
+                return; // Sortir de la fonction updateTrees
+            }
 
             // Augmenter la vitesse progressivement
             gameSpeed = Math.min(gameSpeed + 0.01, 3);
+        }
+
+        // Vérifier à nouveau après chaque arbre (sécurité supplémentaire)
+        if (score >= WIN_SCORE) {
+            winGame();
+            return;
         }
 
         // Vérifier les collisions
         if (checkCollision(tree)) {
             hitTree();
         }
-    });
+    }
 
     // Supprimer les arbres hors écran
     trees.forEach((tree, index) => {
@@ -567,6 +585,13 @@ function gameLoop() {
         return;
     }
 
+    // Vérifier si le joueur a gagné avant de continuer
+    if (score >= WIN_SCORE) {
+        console.log('Vérification dans gameLoop - Score:', score, 'WIN_SCORE:', WIN_SCORE);
+        winGame();
+        return;
+    }
+
     // Dessiner
     drawBackground();
     drawTrees();
@@ -575,6 +600,13 @@ function gameLoop() {
     // Mettre à jour
     updateBird();
     updateTrees();
+
+    // Vérifier à nouveau après la mise à jour (sécurité)
+    if (score >= WIN_SCORE) {
+        console.log('Vérification après updateTrees - Score:', score, 'WIN_SCORE:', WIN_SCORE);
+        winGame();
+        return;
+    }
 
     requestAnimationFrame(gameLoop);
 }
@@ -604,16 +636,43 @@ function togglePause() {
 }
 
 // Afficher le message de succès
-function showSuccess() {
+function showSuccess(message, title) {
+    if (title) {
+        document.getElementById('successTitle').textContent = title;
+    }
+    if (message) {
+        document.getElementById('successMessage').textContent = message;
+    }
     document.getElementById('flappyEarthSuccess').classList.remove('hidden');
     setTimeout(() => {
         hideSuccess();
-    }, 2000);
+    }, 3000);
 }
 
 // Masquer le message de succès
 function hideSuccess() {
     document.getElementById('flappyEarthSuccess').classList.add('hidden');
+}
+
+// Victoire - le joueur a atteint le score de 5
+function winGame() {
+    // Arrêter le jeu immédiatement
+    gameRunning = false;
+    gamePaused = false;
+
+    console.log('Victoire ! Score:', score, 'WIN_SCORE:', WIN_SCORE);
+
+    document.getElementById('finalScore').textContent = score;
+
+    // Vérifier le meilleur score
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('flappyEarthHighScore', highScore);
+        document.getElementById('highScore').textContent = highScore;
+    }
+
+    // Afficher le message de victoire
+    showSuccess('Vous avez atteint 5 points !', '🎉 Félicitations ! 🎉');
 }
 
 // Fin du jeu
@@ -627,7 +686,7 @@ function endGame() {
         highScore = score;
         localStorage.setItem('flappyEarthHighScore', highScore);
         document.getElementById('highScore').textContent = highScore;
-        showSuccess();
+        showSuccess('Nouveau record !', '🎉 Excellent ! 🎉');
     }
 }
 
