@@ -1,4 +1,4 @@
-const canvas = document.getElementById('flappyBirdCanvas');
+const canvas = document.getElementById('flappyEarthCanvas');
 const ctx = canvas.getContext('2d');
 
 ctx.imageSmoothingEnabled = true;
@@ -12,16 +12,16 @@ canvas.height = CANVAS_SIZE;
 let gameRunning = false;
 let gamePaused = false;
 let score = 0;
-let highScore = localStorage.getItem('flappyBirdHighScore') || 0;
+let highScore = localStorage.getItem('flappyEarthHighScore') || 0;
 let lives = 2;
 let gameSpeed = 2;
 
-// Oiseau
+// Oiseau (Terre)
 const bird = {
     x: 100,
     y: CANVAS_SIZE / 2,
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,  // Taille carrée
     velocity: 0,
     gravity: 0.5,
     jumpPower: -8,
@@ -40,6 +40,23 @@ const treeConfig = {
 };
 
 let nextTreeX = CANVAS_SIZE;
+
+// Image de la Terre (oiseau)
+const earthImage = new Image();
+earthImage.src = 'image/flappyHearth/hearth.png';
+let earthImageLoaded = false;
+
+earthImage.onload = () => {
+    earthImageLoaded = true;
+    console.log('Image de la Terre chargée:', earthImage.width, 'x', earthImage.height);
+    if (gameRunning) {
+        gameLoop();
+    }
+};
+
+earthImage.onerror = () => {
+    console.warn('Image de la Terre non trouvée, utilisation du dessin par défaut');
+};
 
 // Initialiser le meilleur score
 document.getElementById('highScore').textContent = highScore;
@@ -76,7 +93,7 @@ function drawCloud(x, y) {
     ctx.fill();
 }
 
-// Dessiner l'oiseau
+// Dessiner l'oiseau (Terre)
 function drawBird() {
     ctx.save();
 
@@ -85,33 +102,72 @@ function drawBird() {
     ctx.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     ctx.rotate(rotation);
 
-    // Corps de l'oiseau (cercle)
-    ctx.beginPath();
-    ctx.arc(0, 0, bird.width / 2, 0, Math.PI * 2);
-    ctx.fillStyle = bird.color;
-    ctx.fill();
-    ctx.strokeStyle = '#FFA500';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    if (earthImageLoaded && earthImage.complete && earthImage.naturalWidth > 0) {
+        // Utiliser l'image de la Terre
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
 
-    // Œil
-    ctx.beginPath();
-    ctx.arc(5, -5, 4, 0, Math.PI * 2);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(6, -5, 2, 0, Math.PI * 2);
-    ctx.fillStyle = 'black';
-    ctx.fill();
+        // Taille carrée pour l'image
+        const size = Math.min(bird.width, bird.height);
+        const radius = size / 2;
 
-    // Bec
-    ctx.beginPath();
-    ctx.moveTo(bird.width / 2 - 2, 0);
-    ctx.lineTo(bird.width / 2 + 8, -3);
-    ctx.lineTo(bird.width / 2 + 8, 3);
-    ctx.closePath();
-    ctx.fillStyle = '#FF6347';
-    ctx.fill();
+        // Créer un masque circulaire pour garder l'image ronde
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.clip();
+
+        // Calculer les dimensions pour garder les proportions de l'image
+        const imageAspectRatio = earthImage.naturalWidth / earthImage.naturalHeight;
+        let drawWidth = size;
+        let drawHeight = size;
+
+        if (imageAspectRatio > 1) {
+            // Image plus large que haute
+            drawHeight = size / imageAspectRatio;
+        } else {
+            // Image plus haute que large
+            drawWidth = size * imageAspectRatio;
+        }
+
+        // Dessiner l'image de la Terre en gardant les proportions
+        ctx.drawImage(
+            earthImage,
+            0, 0, earthImage.naturalWidth, earthImage.naturalHeight,
+            -drawWidth / 2,
+            -drawHeight / 2,
+            drawWidth,
+            drawHeight
+        );
+    } else {
+        // Fallback : dessin par défaut si l'image n'est pas chargée
+        // Corps de l'oiseau (cercle)
+        ctx.beginPath();
+        ctx.arc(0, 0, bird.width / 2, 0, Math.PI * 2);
+        ctx.fillStyle = bird.color;
+        ctx.fill();
+        ctx.strokeStyle = '#FFA500';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Œil
+        ctx.beginPath();
+        ctx.arc(5, -5, 4, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(6, -5, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+
+        // Bec
+        ctx.beginPath();
+        ctx.moveTo(bird.width / 2 - 2, 0);
+        ctx.lineTo(bird.width / 2 + 8, -3);
+        ctx.lineTo(bird.width / 2 + 8, 3);
+        ctx.closePath();
+        ctx.fillStyle = '#FF6347';
+        ctx.fill();
+    }
 
     ctx.restore();
 }
@@ -532,7 +588,7 @@ function startGame() {
     gameSpeed = 2;
     document.getElementById('score').textContent = score;
     document.getElementById('lives').textContent = lives;
-    document.getElementById('flappyBirdOver').classList.add('hidden');
+    document.getElementById('flappyEarthOver').classList.add('hidden');
     hideSuccess();
     resetBird();
     gameLoop();
@@ -549,7 +605,7 @@ function togglePause() {
 
 // Afficher le message de succès
 function showSuccess() {
-    document.getElementById('flappyBirdSuccess').classList.remove('hidden');
+    document.getElementById('flappyEarthSuccess').classList.remove('hidden');
     setTimeout(() => {
         hideSuccess();
     }, 2000);
@@ -557,19 +613,19 @@ function showSuccess() {
 
 // Masquer le message de succès
 function hideSuccess() {
-    document.getElementById('flappyBirdSuccess').classList.add('hidden');
+    document.getElementById('flappyEarthSuccess').classList.add('hidden');
 }
 
 // Fin du jeu
 function endGame() {
     gameRunning = false;
     document.getElementById('finalScore').textContent = score;
-    document.getElementById('flappyBirdOver').classList.remove('hidden');
+    document.getElementById('flappyEarthOver').classList.remove('hidden');
 
     // Vérifier le meilleur score
     if (score > highScore) {
         highScore = score;
-        localStorage.setItem('flappyBirdHighScore', highScore);
+        localStorage.setItem('flappyEarthHighScore', highScore);
         document.getElementById('highScore').textContent = highScore;
         showSuccess();
     }
