@@ -26,8 +26,8 @@
             <button id="restartBtn">Rejouer</button>
         </div>
         <div id="flappyEarthSuccess" class="flappyEarth-success hidden">
-            <h2>🎉 Excellent ! 🎉</h2>
-            <p>Nouveau record !</p>
+            <h2 id="successTitle">🎉 Excellent ! 🎉</h2>
+            <p id="successMessage">Nouveau record !</p>
         </div>
     </div>
     <script src="js/FlappyEarth.js"></script>
