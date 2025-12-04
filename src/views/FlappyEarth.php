@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird</title>
-    <link rel="stylesheet" href="css/FlappyBird.css">
+    <title>Flappy Earth</title>
+    <link rel="stylesheet" href="css/FlappyEarth.css">
 </head>
 <body>
-    <div class="flappyBird-container">
-        <h1>Flappy Bird</h1>
+    <div class="flappyEarth-container">
+        <h1>Flappy Earth</h1>
         <div class="score-container">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="highScore">Meilleur: <span id="highScore">0</span></div>
             <div class="lives">Vies: <span id="lives">2</span></div>
         </div>
-        <canvas id="flappyBirdCanvas"></canvas>
+        <canvas id="flappyEarthCanvas"></canvas>
         <div class="controls">
-            <p>Appuyez sur ESPACE ou cliquez pour faire voler l'oiseau</p>
+            <p>Appuyez sur ESPACE ou cliquez pour faire voler la Terre</p>
             <button id="startBtn">Commencer</button>
             <button id="pauseBtn">Pause</button>
         </div>
-        <div id="flappyBirdOver" class="flappyBird-over hidden">
+        <div id="flappyEarthOver" class="flappyEarth-over hidden">
             <h2>Partie terminée !</h2>
             <p>Score final: <span id="finalScore">0</span></p>
             <button id="restartBtn">Rejouer</button>
         </div>
-        <div id="flappyBirdSuccess" class="flappyBird-success hidden">
+        <div id="flappyEarthSuccess" class="flappyEarth-success hidden">
             <h2>🎉 Excellent ! 🎉</h2>
             <p>Nouveau record !</p>
         </div>
     </div>
-    <script src="js/FlappyBird.js"></script>
+    <script src="js/FlappyEarth.js"></script>
 </body>
 </html>
 
