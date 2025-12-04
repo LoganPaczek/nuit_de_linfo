@@ -271,12 +271,12 @@ function updateBall() {
 
                 // Vérifier si toutes les briques sont détruites
                 if (bricks.every(b => !b.visible)) {
+                    // Arrêter le jeu au lieu de le relancer automatiquement
+                    gameRunning = false;
                     showSuccess();
                     setTimeout(() => {
                         hideSuccess();
-                        initBricks();
-                        resetBall();
-                        ball.speed += 0.5;
+                        endGame();
                     }, 2000);
                 }
             }
