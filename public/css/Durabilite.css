@@ -20,6 +20,7 @@
     gap: 32px;
     box-shadow: 2px 4px 0px #aaa;
     border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .left_part h1 strong {
@@ -37,7 +38,8 @@
     align-items: center;
     width: 30%;
     gap: 32px;
-    border-radius: 10px;
+    border-radius: 10px;    
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .middle_part .image_container img{
@@ -57,6 +59,7 @@
     width: 32%;
     box-shadow: 2px 4px 0px #aaa;
     border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .right_part p {
