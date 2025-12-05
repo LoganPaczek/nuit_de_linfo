@@ -12,7 +12,7 @@
 
 
     <div class="nav_log_container">
-            <a href="index.php?uc=Accueil&action=Connexion">Se connecter </a>
-        <a href="index.php?uc=Accueil&action=Sinscrire">S'isncrire </a>
+            <a href="index.php?uc=Connexion">Se connecter </a>
+        <a href="index.php?uc=Inscription">S'isncrire </a>
     </div>
 </nav>
