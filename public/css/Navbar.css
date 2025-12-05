@@ -1,6 +1,6 @@
 /* Navbar */
 
-nav {
+body    nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -9,22 +9,22 @@ nav {
     background: radial-gradient(circle, rgba(2, 0, 125, 0.48) 15%, rgba(241, 148, 255, 0.51) 45%, rgba(250, 128, 114, 0.48) 79%, rgba(255, 231, 71, 0.49) 96%);
 }
 
-nav .logo_container {
+body nav .logo_container {
     width: 200px;
 }
 
-nav .logo_container img {
+body nav .logo_container img {
     width: 100%;
     height: 100%;
 }
 
-nav .nav_links_container {
+body nav .nav_links_container {
     display: flex;
     gap: 24px;
     text-decoration: none;
 }
 
-nav .nav_links_container a {
+body nav .nav_links_container a {
     text-decoration: none;
     color: black;
     font-size: 18px;
@@ -33,12 +33,12 @@ nav .nav_links_container a {
     padding: 8px 16px;
 }
 
-nav .nav_links_container a:hover {
+body nav .nav_links_container a:hover {
     background-color: rgba(0, 0, 0, 0.534);
     color: white;
 }
 
-nav .nav_log_container {
+body nav .nav_log_container {
     display: flex;
     gap: 16px;
 }

@@ -20,6 +20,8 @@ $uc = $_GET['uc'];
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./css/Navbar.css">
+	<link rel="stylesheet" href="./css/Global.css">
+	<link rel="stylesheet" href="./css/Reset.css">
 	<?php if($uc == 'Accueil'): ?>
 		<link rel="stylesheet" href="./css/Acceuil.css">
 	<?php endif; ?>

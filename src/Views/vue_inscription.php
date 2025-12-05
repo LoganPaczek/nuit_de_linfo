@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 
-    <script src="Inscription.js" defer></script>
-    <link rel="stylesheet" href="Style_Inscription.css">
-
-</head>
-<body>
 <form action="index.php?uc=Accueil&action=Connexion" method="POST">
 
     <!-- NOM -->
@@ -63,6 +52,3 @@
 
     <button type="submit" >Valider</button>
 </form>
-
-</body>
-</html>
