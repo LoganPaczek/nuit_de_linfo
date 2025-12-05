@@ -12,7 +12,9 @@ const GRID_SIZE = 20;
 const CANVAS_SIZE = 400;
 const WIN_SCORE = 10;
 const ITEM_SIZE = 28; // Taille des items (plus grande que GRID_SIZE)
-const SNAKE_SPEED = 2; // Vitesse du serpent en pixels par frame
+const SNAKE_SPEED = 4.5; // Vitesse du serpent en pixels par frame
+const SEGMENT_FOLLOW_SPEED = 0.25; // Vitesse de suivi des segments (lerp factor, plus haut = plus réactif mais toujours fluide)
+const TURN_SMOOTHNESS = 0.12; // Lissage des virages (plus bas = plus fluide)
 
 // Calculer le nombre de cellules
 const CELLS_X = Math.floor(CANVAS_SIZE / GRID_SIZE);
@@ -25,6 +27,8 @@ canvas.height = CANVAS_SIZE;
 let snake = [{ x: 200, y: 200 }]; // Positions en pixels
 let targetX = 200; // Position cible X en pixels
 let targetY = 200; // Position cible Y en pixels
+let velocityX = 0; // Vélocité X pour mouvement fluide
+let velocityY = 0; // Vélocité Y pour mouvement fluide
 let items = [];
 let score = 0;
 let gameRunning = false;
@@ -103,30 +107,49 @@ function drawSnake() {
     const radius = GRID_SIZE / 2;
     const lineWidth = GRID_SIZE;
 
-    // Dessiner le corps comme une ligne continue épaisse
+    // Dessiner le corps avec des courbes de Bézier pour un rendu ultra-fluide
     ctx.beginPath();
-    ctx.moveTo(snake[0].x, snake[0].y);
 
-    for (let i = 1; i < snake.length; i++) {
-        ctx.lineTo(snake[i].x, snake[i].y);
+    if (snake.length === 1) {
+        // Si un seul segment, juste dessiner la tête
+        ctx.arc(snake[0].x, snake[0].y, radius, 0, Math.PI * 2);
+    } else {
+        // Commencer par la queue
+        ctx.moveTo(snake[snake.length - 1].x, snake[snake.length - 1].y);
+
+        // Dessiner des courbes quadratiques entre les segments pour un rendu ultra-lisse
+        for (let i = snake.length - 2; i >= 0; i--) {
+            const current = snake[i];
+            const next = snake[i + 1];
+
+            if (i === 0) {
+                // Dernière courbe vers la tête
+                ctx.quadraticCurveTo(next.x, next.y, current.x, current.y);
+            } else {
+                // Courbes quadratiques pour un rendu ultra-fluide
+                const midX = (current.x + next.x) / 2;
+                const midY = (current.y + next.y) / 2;
+                ctx.quadraticCurveTo(next.x, next.y, midX, midY);
+            }
+        }
     }
 
-    // Style de ligne avec extrémités arrondies
+    // Style de ligne avec extrémités arrondies pour un rendu ultra-fluide
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = '#51cf66';
     ctx.stroke();
 
-    // Dessiner la tête (cercle plus clair)
+    // Dessiner la tête (cercle plus clair et légèrement plus grand)
     ctx.beginPath();
-    ctx.arc(snake[0].x, snake[0].y, radius, 0, Math.PI * 2);
+    ctx.arc(snake[0].x, snake[0].y, radius * 1.2, 0, Math.PI * 2);
     ctx.fillStyle = '#69db7c';
     ctx.fill();
 
-    // Contour de la tête
+    // Contour de la tête avec un dégradé subtil
     ctx.strokeStyle = '#3d9b4f';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.5;
     ctx.stroke();
 }
 
@@ -180,23 +203,37 @@ function drawItems() {
 function updateSnake() {
     const head = { ...snake[0] };
 
-    // Calculer la direction vers la cible
+    // Calculer la direction vers la cible avec interpolation fluide
     const dx = targetX - head.x;
     const dy = targetY - head.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Si on est proche de la cible, on s'arrête, sinon on se déplace vers elle
-    if (distance > SNAKE_SPEED) {
-        // Normaliser la direction et multiplier par la vitesse
-        const moveX = (dx / distance) * SNAKE_SPEED;
-        const moveY = (dy / distance) * SNAKE_SPEED;
+    // Système de vélocité avec interpolation pour un mouvement ultra-fluide
+    if (distance > 0.1) {
+        // Normaliser la direction
+        const dirX = dx / distance;
+        const dirY = dy / distance;
 
-        head.x += moveX;
-        head.y += moveY;
+        // Interpoler la vélocité vers la direction cible (smooth turning)
+        velocityX += (dirX * SNAKE_SPEED - velocityX) * TURN_SMOOTHNESS;
+        velocityY += (dirY * SNAKE_SPEED - velocityY) * TURN_SMOOTHNESS;
+
+        // Limiter la vélocité maximale
+        const velMag = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+        if (velMag > SNAKE_SPEED) {
+            velocityX = (velocityX / velMag) * SNAKE_SPEED;
+            velocityY = (velocityY / velMag) * SNAKE_SPEED;
+        }
+
+        // Appliquer la vélocité
+        head.x += velocityX;
+        head.y += velocityY;
     } else {
-        // On est arrivé à la cible
-        head.x = targetX;
-        head.y = targetY;
+        // Ralentir progressivement quand on est proche de la cible
+        velocityX *= 0.9;
+        velocityY *= 0.9;
+        head.x += velocityX;
+        head.y += velocityY;
     }
 
     // Vérifier collision avec les parois
@@ -206,22 +243,27 @@ function updateSnake() {
         return;
     }
 
-    // Faire suivre chaque segment au précédent avec une distance fixe (collé)
-    const segmentDistance = GRID_SIZE;
+    // Faire suivre chaque segment au précédent avec interpolation ultra-fluide (style slither.io)
+    const segmentDistance = GRID_SIZE * 0.95; // Légèrement plus proche pour un rendu plus serré
     for (let i = 1; i < snake.length; i++) {
         const prevSegment = snake[i - 1];
         const currentSegment = snake[i];
 
-        const dx = currentSegment.x - prevSegment.x;
-        const dy = currentSegment.y - prevSegment.y;
+        // Calculer la direction vers le segment précédent
+        const dx = prevSegment.x - currentSegment.x;
+        const dy = prevSegment.y - currentSegment.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        // Toujours maintenir la distance exacte (collé)
-        if (dist !== segmentDistance) {
-            // Normaliser et ajuster la position pour être exactement à la bonne distance
+        // Toujours interpoler pour un mouvement ultra-fluide, même si la distance est correcte
+        if (dist > 0.1) {
+            // Normaliser la direction
             const angle = Math.atan2(dy, dx);
-            currentSegment.x = prevSegment.x + Math.cos(angle) * segmentDistance;
-            currentSegment.y = prevSegment.y + Math.sin(angle) * segmentDistance;
+            const targetX = prevSegment.x - Math.cos(angle) * segmentDistance;
+            const targetY = prevSegment.y - Math.sin(angle) * segmentDistance;
+
+            // Interpolation linéaire pour un mouvement ultra-fluide
+            currentSegment.x += (targetX - currentSegment.x) * SEGMENT_FOLLOW_SPEED;
+            currentSegment.y += (targetY - currentSegment.y) * SEGMENT_FOLLOW_SPEED;
         }
     }
 
@@ -320,9 +362,9 @@ function gameLoop() {
         drawSnake();
     }
 
-    // Continuer la boucle (plus rapide pour un mouvement fluide)
+    // Continuer la boucle avec requestAnimationFrame pour un rendu ultra-fluide
     if (gameRunning) {
-        gameLoopId = setTimeout(gameLoop, 16); // ~60 FPS
+        gameLoopId = requestAnimationFrame(gameLoop);
     }
 }
 
@@ -344,6 +386,8 @@ function startGame() {
     // Positionner la cible légèrement à droite pour que le serpent commence à bouger
     targetX = startX + 30;
     targetY = startY;
+    velocityX = 2; // Vitesse initiale
+    velocityY = 0;
     score = 0;
     scoreElement.textContent = score;
     gameRunning = true;
@@ -358,7 +402,7 @@ function startGame() {
 function gameOver(message = 'Vous avez touché une paroi') {
     gameRunning = false;
     if (gameLoopId) {
-        clearTimeout(gameLoopId);
+        cancelAnimationFrame(gameLoopId);
     }
     gameOverMessage.textContent = message;
     gameOverDiv.classList.remove('hidden');
@@ -368,7 +412,7 @@ function gameOver(message = 'Vous avez touché une paroi') {
 function winGame() {
     gameRunning = false;
     if (gameLoopId) {
-        clearTimeout(gameLoopId);
+        cancelAnimationFrame(gameLoopId);
     }
     gameWinDiv.classList.remove('hidden');
 }
