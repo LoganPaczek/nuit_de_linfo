@@ -34,6 +34,7 @@ La distribution peut être testée depuis une clé USB sans toucher au système 
         </div>
         <div class="middle-container">
             <div class="image">
+            <img src="./images/linuxpage.png" alt="Linux NIRD">
             </div>
             <div class="paragraphe_2">
                 <p>En adoptant Linux NIRD, un établissement fait le choix d’un numérique plus libre, plus maîtrisé et plus durable : il prolonge la vie de ses ordinateurs, limite ses dépenses de licences et dispose d’un support concret pour parler de logiciels libres, de sobriété numérique et d’autonomie technologique avec l’ensemble de la communauté éducative.</p>
