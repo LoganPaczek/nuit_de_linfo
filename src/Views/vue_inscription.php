@@ -1,5 +1,15 @@
 
+<<<<<<< HEAD:public/vue_inscription.php
+    <script src="Inscription.js" defer></script>
+    <script src="js/captcha.js" defer></script>
+    <link rel="stylesheet" href="Style_Inscription.css">
+
+</head>
+<body>
+<form action="traitement.php" method="POST">
+=======
 <form action="index.php?uc=Accueil&action=Connexion" method="POST">
+>>>>>>> develop:src/Views/vue_inscription.php
 
     <!-- NOM -->
     <label for="nom">Nom :</label><br>
@@ -52,3 +62,13 @@
 
     <button type="submit" >Valider</button>
 </form>
+<<<<<<< HEAD:public/vue_inscription.php
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    ecouterSouris(); // active l'écoute des clics
+});
+</script>
+</body>
+</html>
+=======
+>>>>>>> develop:src/Views/vue_inscription.php
