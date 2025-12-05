@@ -187,6 +187,23 @@ function checkWin() {
 
         if (isCorrect) {
             document.getElementById('sudokuWin').classList.remove('hidden');
+            
+            // Sauvegarder la victoire en session
+            fetch('save_sudoku_win.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Victoire Sudoku sauvegardée en session');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la sauvegarde:', error);
+            });
         }
     }
 }
@@ -220,6 +237,14 @@ document.getElementById('playAgainBtn').addEventListener('click', () => {
     document.getElementById('sudokuWin').classList.add('hidden');
     initGame();
 });
+
+// Bouton pour continuer vers Inclusion après la victoire
+const continueBtn = document.getElementById('continueBtn');
+if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+        window.location.href = 'index.php?uc=Inclusion';
+    });
+}
 
 // Initialisation au chargement
 initGame();

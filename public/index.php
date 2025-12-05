@@ -40,6 +40,9 @@ $uc = $_GET['uc'];
 	<?php if($uc == 'Inclusion'): ?>
 		<link rel="stylesheet" href="./css/Inclusion.css">
 	<?php endif; ?>
+	<?php if($uc == 'Sudoku'): ?>
+		<link rel="stylesheet" href="./css/Sudoku.css">
+	<?php endif; ?>
 	<?php if($uc == 'Durabilité'): ?>
 		<link rel="stylesheet" href="./css/Durabilite.css">
 	<?php endif; ?>
@@ -78,7 +81,12 @@ $uc = $_GET['uc'];
 			}
 
 			case 'Inclusion':{
-				include("../src/Views/Vue_Inclusion.php");
+				include("../src/controleurs/c_inclusion.php");
+				break;
+			}
+
+			case 'Sudoku':{
+				include("../src/Views/Sudoku.php");
 				break;
 			}
 
