@@ -37,6 +37,9 @@ $uc = $_GET['uc'];
 	<?php if($uc == 'Memory'): ?>
 		<link rel="stylesheet" href="./css/Memory.css">
 	<?php endif; ?>
+	<?php if($uc == 'Inclusion'): ?>
+		<link rel="stylesheet" href="./css/Inclusion.css">
+	<?php endif; ?>
 	<?php if($uc == 'Durabilité'): ?>
 		<link rel="stylesheet" href="./css/Durabilite.css">
 	<?php endif; ?>
@@ -63,6 +66,11 @@ $uc = $_GET['uc'];
 
 			case 'Durabilité':{
 				include("../src/Views/Vue_Durabilite.php");
+				break;
+			}
+
+			case 'Inclusion':{
+				include("../src/Views/Vue_Inclusion.php");
 				break;
 			}
 
