@@ -25,6 +25,7 @@
             <button id="playAgainBtn">Rejouer</button>
         </div>
     </div>
+    <script src="js/SudokuGrids.js"></script>
     <script src="js/Sudoku.js"></script>
 </body>
 </html>
