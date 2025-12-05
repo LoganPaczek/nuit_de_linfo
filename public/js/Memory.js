@@ -228,6 +228,23 @@ function winGame() {
     document.getElementById('finalMoves').textContent = moves;
     document.getElementById('finalTime').textContent = elapsed;
     document.getElementById('memoryWin').classList.remove('hidden');
+    
+    // Sauvegarder la victoire en session
+    fetch('save_memory_win.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Victoire sauvegardée en session');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la sauvegarde:', error);
+    });
 }
 
 // Réinitialiser le jeu
@@ -243,6 +260,14 @@ document.getElementById('playAgainBtn').addEventListener('click', () => {
     document.getElementById('memoryWin').classList.add('hidden');
     initGame();
 });
+
+// Bouton pour continuer vers Linux après la victoire
+const continueBtn = document.getElementById('continueBtn');
+if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+        window.location.href = 'index.php?uc=Linux';
+    });
+}
 
 // Initialisation au chargement
 initGame();

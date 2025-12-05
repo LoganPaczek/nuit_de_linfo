@@ -43,7 +43,7 @@ function captchaPopup() {
             //alert("✔️ CAPTCHA correct !");
             document.body.removeChild(overlay);
         } else {
-            alert("Incorrect, nouveau code généré.");
+            alert("❌ Incorrect, nouveau code généré.");
             genererCaptcha();
             input.value = "";
         }
