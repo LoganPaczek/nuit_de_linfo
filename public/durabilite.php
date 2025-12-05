@@ -19,7 +19,7 @@
             <a href="#">Inscription</a>
         </div>
         <div class="nav_log_container">
-            <p>Se déconnecter</p>
+            <button>Se déconnecter</button>
         </div>
     </nav>
 
