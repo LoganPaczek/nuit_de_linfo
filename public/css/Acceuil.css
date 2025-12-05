@@ -8,6 +8,7 @@
     padding-left: 16px;
     border-radius: 20px;
     box-shadow: 2px 4px 0px #aaa;
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .accueil_container .right_part{
@@ -15,6 +16,7 @@
     padding: 0px 16px;
     border-radius: 20px;
     box-shadow: -2px 4px 0px #aaa;
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .accueil_container .right_part .image{

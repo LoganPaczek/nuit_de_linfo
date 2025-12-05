@@ -34,6 +34,24 @@ $uc = $_GET['uc'];
 	<?php if($uc == 'Inscription'): ?>
 		<link rel="stylesheet" href="./css/Inscription.css">
 	<?php endif; ?>
+	<?php if($uc == 'Memory'): ?>
+		<link rel="stylesheet" href="./css/Memory.css">
+	<?php endif; ?>
+	<?php if($uc == 'Inclusion'): ?>
+		<link rel="stylesheet" href="./css/Inclusion.css">
+	<?php endif; ?>
+	<?php if($uc == 'Sudoku'): ?>
+		<link rel="stylesheet" href="./css/Sudoku.css">
+	<?php endif; ?>
+	<?php if($uc == 'Durabilité'): ?>
+		<link rel="stylesheet" href="./css/Durabilite.css">
+	<?php endif; ?>
+	<?php if($uc == 'FlappyEarth'): ?>
+		<link rel="stylesheet" href="./css/FlappyEarth.css">
+	<?php endif; ?>
+	<?php if($uc == 'BreakBrick'): ?>
+		<link rel="stylesheet" href="./css/BreakBrick.css">
+	<?php endif; ?>
 	<title>Document</title>
 </head>
 <body>
@@ -46,17 +64,47 @@ $uc = $_GET['uc'];
 			}
 
 			case 'Linux':{
-				include("../src/Views/Vue_Linux.php");
+				include("../src/controleurs/c_linux.php");
 				break;
 			}
 
 			case 'Responsabilité':{
-				include("../src/Views/Vue_Responsabilite.php");
+				include("../src/controleurs/c_responsabilite.php");
+				break;
+			}
+
+			case 'Durabilité':{
+				include("../src/controleurs/c_durabilite.php");
+				break;
+			}
+
+			case 'FlappyEarth':{
+				include("../src/Views/FlappyEarth.php");
+				break;
+			}
+
+			case 'BreakBrick':{
+				include("../src/Views/BreakBrick.php");
+				break;
+			}
+
+			case 'Inclusion':{
+				include("../src/controleurs/c_inclusion.php");
+				break;
+			}
+
+			case 'Sudoku':{
+				include("../src/Views/Sudoku.php");
 				break;
 			}
 
 			case "Inscription":{
 				include("../src/Views/vue_inscription.php");
+				break;
+			}
+
+			case "Memory":{
+				include("../src/Views/Memory.php");
 				break;
 			}
 			

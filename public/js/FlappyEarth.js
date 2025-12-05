@@ -15,7 +15,7 @@ let score = 0;
 let highScore = localStorage.getItem('flappyEarthHighScore') || 0;
 let lives = 2;
 let gameSpeed = 2;
-const WIN_SCORE = 5; // Score à atteindre pour gagner
+const WIN_SCORE = 10; // Score à atteindre pour gagner
 
 console.log('WIN_SCORE initialisé à:', WIN_SCORE);
 
@@ -46,7 +46,7 @@ let nextTreeX = CANVAS_SIZE;
 
 // Image de la Terre (oiseau)
 const earthImage = new Image();
-earthImage.src = 'image/flappyHearth/hearth.png';
+earthImage.src = 'images/flappyEarth/earth.png';
 let earthImageLoaded = false;
 
 earthImage.onload = () => {
@@ -647,7 +647,7 @@ function hideSuccess() {
     document.getElementById('flappyEarthSuccess').classList.add('hidden');
 }
 
-// Victoire - le joueur a atteint le score de 5
+// Victoire - le joueur a atteint le score de 10
 function winGame() {
     // Arrêter le jeu immédiatement
     gameRunning = false;
@@ -665,7 +665,24 @@ function winGame() {
     }
 
     // Afficher le message de victoire
-    showSuccess('Vous avez atteint 5 points !', '🎉 Félicitations ! 🎉');
+    showSuccess('Vous avez atteint 10 points !', '🎉 Félicitations ! 🎉');
+    
+    // Sauvegarder la victoire en session
+    fetch('save_flappy_win.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Victoire sauvegardée en session');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la sauvegarde:', error);
+    });
 }
 
 // Fin du jeu
@@ -686,5 +703,13 @@ function endGame() {
 document.getElementById('startBtn').addEventListener('click', startGame);
 document.getElementById('pauseBtn').addEventListener('click', togglePause);
 document.getElementById('restartBtn').addEventListener('click', startGame);
+
+// Bouton pour continuer vers Durabilité après la victoire
+const continueBtn = document.getElementById('continueBtn');
+if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+        window.location.href = 'index.php?uc=Durabilité';
+    });
+}
 
 resetBird();

@@ -15,6 +15,7 @@
     padding: 16px;
     border-radius: 20px;
     box-shadow: 2px 4px 0px #aaa;
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .right_part {
@@ -26,6 +27,7 @@
     height: 100%;
     border-radius: 20px;
     box-shadow: 2px 4px 0px #aaa;
+    background-color: rgba(255, 255, 255, 0.11);
 }
 
 .image_container {

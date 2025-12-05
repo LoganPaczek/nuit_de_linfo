@@ -242,9 +242,59 @@ const sudokuGrids = [
     }
 ];
 
-// Fonction pour obtenir une grille aléatoire
+// Fonction pour enrichir une grille avec plus de nombres (rendre plus facile)
+function enrichGrid(grid) {
+    const enriched = grid.initial.map(row => [...row]);
+    const solution = grid.solution;
+    
+    // Compter le nombre de cases vides (0)
+    let emptyCount = 0;
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (enriched[row][col] === 0) {
+                emptyCount++;
+            }
+        }
+    }
+    
+    // Remplir environ 40% des cases vides avec les valeurs de la solution
+    // Cela laisse environ 30-35 nombres au lieu de 20-25
+    const cellsToFill = Math.floor(emptyCount * 0.4);
+    let filled = 0;
+    
+    // Créer une liste de toutes les positions vides
+    const emptyPositions = [];
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (enriched[row][col] === 0) {
+                emptyPositions.push({ row, col });
+            }
+        }
+    }
+    
+    // Mélanger les positions pour un remplissage aléatoire
+    for (let i = emptyPositions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [emptyPositions[i], emptyPositions[j]] = [emptyPositions[j], emptyPositions[i]];
+    }
+    
+    // Remplir les cases sélectionnées
+    for (let i = 0; i < cellsToFill && i < emptyPositions.length; i++) {
+        const pos = emptyPositions[i];
+        enriched[pos.row][pos.col] = solution[pos.row][pos.col];
+    }
+    
+    return {
+        initial: enriched,
+        solution: grid.solution
+    };
+}
+
+// Fonction pour obtenir une grille aléatoire enrichie
 function getRandomGrid() {
     const randomIndex = Math.floor(Math.random() * sudokuGrids.length);
-    return sudokuGrids[randomIndex];
+    const selectedGrid = sudokuGrids[randomIndex];
+    // Enrichir la grille pour la rendre plus facile
+    return enrichGrid(selectedGrid);
 }
 
