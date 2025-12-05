@@ -34,6 +34,9 @@ $uc = $_GET['uc'];
 	<?php if($uc == 'Inscription'): ?>
 		<link rel="stylesheet" href="./css/Inscription.css">
 	<?php endif; ?>
+	<?php if($uc == 'Memory'): ?>
+		<link rel="stylesheet" href="./css/Memory.css">
+	<?php endif; ?>
 	<title>Document</title>
 </head>
 <body>
@@ -46,7 +49,7 @@ $uc = $_GET['uc'];
 			}
 
 			case 'Linux':{
-				include("../src/Views/Vue_Linux.php");
+				include("../src/controleurs/c_linux.php");
 				break;
 			}
 
@@ -57,6 +60,11 @@ $uc = $_GET['uc'];
 
 			case "Inscription":{
 				include("../src/Views/vue_inscription.php");
+				break;
+			}
+
+			case "Memory":{
+				include("../src/Views/Memory.php");
 				break;
 			}
 			
