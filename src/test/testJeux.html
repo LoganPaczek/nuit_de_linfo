@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../public/css/jeuxdurabilite.css">
+    
+    <title>Document</title>
+</head>
+<body>
+   <div id="mon-jeu-div" style="width: 300px; height: 400px;"></div>
+    
+    <!-- ✅ Scripts À LA FIN du body -->
+    <script src="../../public/js/jeuxdurability.js"></script>
+    <script>
+        // ✅ Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', function() {
+    console.log('DEBUG: Appel initJeuTriDechets');
+    initJeuTriDechets('mon-jeu-div');
+    console.log('DEBUG: Jeu initialisé');
+});
+
+    </script>
+</body>
+</html>
