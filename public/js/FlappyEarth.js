@@ -406,8 +406,7 @@ function updateTrees() {
     nextTreeX -= treeConfig.speed * gameSpeed;
 
     // Mettre à jour les arbres existants
-    for (let index = 0; index < trees.length; index++) {
-        const tree = trees[index];
+    trees.forEach((tree, index) => {
         tree.x -= treeConfig.speed * gameSpeed;
 
         // Vérifier si l'oiseau a passé l'arbre
@@ -428,17 +427,11 @@ function updateTrees() {
             gameSpeed = Math.min(gameSpeed + 0.01, 3);
         }
 
-        // Vérifier à nouveau après chaque arbre (sécurité supplémentaire)
-        if (score >= WIN_SCORE) {
-            winGame();
-            return;
-        }
-
         // Vérifier les collisions
         if (checkCollision(tree)) {
             hitTree();
         }
-    }
+    });
 
     // Supprimer les arbres hors écran
     trees.forEach((tree, index) => {

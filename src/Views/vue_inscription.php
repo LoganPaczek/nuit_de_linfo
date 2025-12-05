@@ -10,7 +10,7 @@
 
 </head>
 <body>
-<form action="traitement.php" method="POST">
+<form action="index.php?uc=Accueil&action=Connexion" method="POST">
 
     <!-- NOM -->
     <label for="nom">Nom :</label><br>
@@ -61,7 +61,7 @@
     </div>
     <br><br>
 
-    <button type="submit">Valider</button>
+    <button type="submit" >Valider</button>
 </form>
 
 </body>
