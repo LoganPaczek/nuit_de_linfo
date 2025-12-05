@@ -1,8 +1,8 @@
 <?php 
-require_once ("../public/Deconnexion.php");
-function TesteDeconnexion(){
-$email="khalsi@gmail.com";
-    var_dump(Deconnexion($email));
+require_once ("../public/Include/class.pdogsb.inc/Deconnexion.php");
 
+function TesteConnexion(){
+$email="khalsi@gmail.com";
+    var_dump(ValideExitUser($email));
 }
-TesteDeconnexion();
+TesteConnexion();

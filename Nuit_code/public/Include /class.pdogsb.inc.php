@@ -24,13 +24,16 @@ class PdoCodeNuit {
         return self::$instance;
     }
 
+
+
+
      public static function mailExiste($mail) {
         $pdo = PdoCodeNuit::$monPdo;
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE Mail = :mail");
         $stmt->execute([':mail' => $mail]);
         return $stmt->fetchColumn() > 0;
     }
-
+  
      public static function ajouterUser($mail, $nom, $prenom, $dateNaissance) {
          if (self::mailExiste($mail)) {
             return false;  // Mail déjà utilisé
@@ -44,5 +47,17 @@ class PdoCodeNuit {
         $stmt->bindValue(':datenaissance', $dateNaissance, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public static function ValideExitUser($mail) {
+        $pdo = PdoCodeNuit::$monPdo;
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE Mail = :mail");
+        $stmt->execute(['mail' => $mail]);
+        return $stmt->fetchColumn() > 0;
+    }
+    
+
+
+
+
 }
 ?>
