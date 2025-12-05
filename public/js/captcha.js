@@ -67,8 +67,22 @@ function captchaPopup() {
 
 
 function ecouterSouris() {//écoute le clavier à chaque fois que l'utilisateur clique
-    document.addEventListener("click", function() {
-         if (!document.querySelector(".captcha-overlay")) {
+    document.addEventListener("click", function(event) {
+        // Ne pas déclencher le captcha si :
+        // 1. Un overlay de captcha existe déjà
+        // 2. Le clic est sur un input, textarea, select ou button
+        // 3. Le clic est sur un label (qui peut déclencher le focus d'un input)
+        // 4. Le clic est à l'intérieur du popup de captcha
+        const target = event.target;
+        const isFormElement = target.tagName === 'INPUT' || 
+                             target.tagName === 'TEXTAREA' || 
+                             target.tagName === 'SELECT' || 
+                             target.tagName === 'BUTTON' ||
+                             target.tagName === 'LABEL' ||
+                             target.closest('.captcha-popup') ||
+                             target.closest('.captcha-overlay');
+        
+        if (!document.querySelector(".captcha-overlay") && !isFormElement) {
             captchaPopup();
         }
     });
