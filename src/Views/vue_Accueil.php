@@ -10,7 +10,7 @@
 
     <div class="accueil_container">
         <div class="left_part">
-                        <p> La démarche NIRD est une initiative portée par un collectif d’enseignants de la Forge des communs numériques éducatifs, engagée pour un numérique libre, éthique et écologique dans les établissements scolaires.
+            <p> La démarche NIRD est une initiative portée par un collectif d’enseignants de la Forge des communs numériques éducatifs, engagée pour un numérique libre, éthique et écologique dans les établissements scolaires.
                 Elle répond à la dépendance accrue aux grandes entreprises technologiques, mise en lumière par la fin du support de Windows 10, et propose une alternative fondée sur l’autonomie, la sobriété et la <br>
                 Le projet NIRD est né au lycée Carnot de Bruay la Buissière.<br>
                 Les principes fondateurs<br>
@@ -53,7 +53,7 @@
                 </p>
             </div>
             <div  class="image">
-                <img src="./image/imageacceuil.png">
+                <img src="./images/imageacceuil.png">
             </div>
         </div>
     </div>

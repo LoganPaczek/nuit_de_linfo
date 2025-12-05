@@ -20,6 +20,9 @@ $uc = $_GET['uc'];
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./css/Navbar.css">
+	<?php if($uc == 'Accueil'): ?>
+		<link rel="stylesheet" href="./css/Acceuil.css">
+	<?php endif; ?>
 	<title>Document</title>
 </head>
 <body>
