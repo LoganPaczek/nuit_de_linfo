@@ -49,6 +49,9 @@ $uc = $_GET['uc'];
 	<?php if($uc == 'FlappyEarth'): ?>
 		<link rel="stylesheet" href="./css/FlappyEarth.css">
 	<?php endif; ?>
+	<?php if($uc == 'BreakBrick'): ?>
+		<link rel="stylesheet" href="./css/BreakBrick.css">
+	<?php endif; ?>
 	<title>Document</title>
 </head>
 <body>
@@ -66,7 +69,7 @@ $uc = $_GET['uc'];
 			}
 
 			case 'Responsabilité':{
-				include("../src/Views/Vue_Responsabilite.php");
+				include("../src/controleurs/c_responsabilite.php");
 				break;
 			}
 
@@ -77,6 +80,11 @@ $uc = $_GET['uc'];
 
 			case 'FlappyEarth':{
 				include("../src/Views/FlappyEarth.php");
+				break;
+			}
+
+			case 'BreakBrick':{
+				include("../src/Views/BreakBrick.php");
 				break;
 			}
 

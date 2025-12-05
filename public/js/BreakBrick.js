@@ -274,10 +274,23 @@ function updateBall() {
                     // Arrêter le jeu au lieu de le relancer automatiquement
                     gameRunning = false;
                     showSuccess();
-                    setTimeout(() => {
-                        hideSuccess();
-                        endGame();
-                    }, 2000);
+                    
+                    // Sauvegarder la victoire en session
+                    fetch('save_breakbrick_win.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Victoire BreakBrick sauvegardée en session');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la sauvegarde:', error);
+                    });
                 }
             }
         }
@@ -359,5 +372,13 @@ function endGame() {
 document.getElementById('startBtn').addEventListener('click', startGame);
 document.getElementById('pauseBtn').addEventListener('click', togglePause);
 document.getElementById('restartBtn').addEventListener('click', startGame);
+
+// Bouton pour continuer vers Responsabilité après la victoire
+const continueBtn = document.getElementById('continueBtn');
+if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+        window.location.href = 'index.php?uc=Responsabilité';
+    });
+}
 
 initBricks();
