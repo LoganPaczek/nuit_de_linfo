@@ -327,6 +327,44 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Contrôles souris
+canvas.addEventListener('mousemove', (e) => {
+    if (!gameRunning) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Position de la tête du serpent en pixels
+    const headX = snake[0].x * GRID_SIZE + GRID_SIZE / 2;
+    const headY = snake[0].y * GRID_SIZE + GRID_SIZE / 2;
+
+    // Calculer la direction vers la souris
+    const dx = mouseX - headX;
+    const dy = mouseY - headY;
+
+    // Déterminer la direction principale (horizontal ou vertical)
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Mouvement horizontal
+        if (dx > 0 && direction.x === 0) {
+            // Aller à droite
+            nextDirection = { x: 1, y: 0 };
+        } else if (dx < 0 && direction.x === 0) {
+            // Aller à gauche
+            nextDirection = { x: -1, y: 0 };
+        }
+    } else {
+        // Mouvement vertical
+        if (dy > 0 && direction.y === 0) {
+            // Aller en bas
+            nextDirection = { x: 0, y: 1 };
+        } else if (dy < 0 && direction.y === 0) {
+            // Aller en haut
+            nextDirection = { x: 0, y: -1 };
+        }
+    }
+});
+
 // Boutons
 restartBtn.addEventListener('click', startGame);
 playAgainBtn.addEventListener('click', startGame);
