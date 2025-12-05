@@ -23,6 +23,9 @@ $uc = $_GET['uc'];
 	<?php if($uc == 'Accueil'): ?>
 		<link rel="stylesheet" href="./css/Acceuil.css">
 	<?php endif; ?>
+	<?php if($uc == 'Linux'): ?>
+		<link rel="stylesheet" href="./css/Linux.css">
+	<?php endif; ?>
 	<title>Document</title>
 </head>
 <body>
@@ -31,6 +34,11 @@ $uc = $_GET['uc'];
 		switch($uc){
 			case 'Accueil':{
 				include("../src/controleurs/c_acueil.php");
+				break;
+			}
+
+			case 'Linux':{
+				include("../src/Views/Vue_Linux.php");
 				break;
 			}
 			

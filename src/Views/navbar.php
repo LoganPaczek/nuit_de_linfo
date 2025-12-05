@@ -4,11 +4,10 @@
     </div>
     <div class="nav_links_container">
         <a href="#">Accueil</a>
-        <a href="#">Inclusion</a>
-        <a href="#">Responsabilité</a>
-        <a href="#">Durabilité</a>
-        <a href="#">Inscription</a>
-        <a href="#">Connexion</a>
+        <a href="index.php?uc=Linux">Linux</a>
+        <a href="index.php?uc=Inclusion">Inclusion</a>
+        <a href="index.php?uc=Responsabilité">Responsabilité</a>
+        <a href="index.php?uc=Durabilité">Durabilité</a>
     </div>
 
 
