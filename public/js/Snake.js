@@ -10,6 +10,7 @@ const playAgainBtn = document.getElementById('playAgainBtn');
 const GRID_SIZE = 20;
 const CANVAS_SIZE = 400;
 const WIN_SCORE = 10;
+const ITEM_SIZE = 28; // Taille des items (plus grande que GRID_SIZE)
 
 // Calculer le nombre de cellules
 const CELLS_X = Math.floor(CANVAS_SIZE / GRID_SIZE);
@@ -62,17 +63,26 @@ Object.values(itemImages).forEach(img => {
 // Types d'items disponibles
 const itemTypes = ['keyboard', 'laptop', 'screen', 'virus'];
 
-// Générer un item aléatoire
+// Générer un item aléatoire avec mouvement
 function generateItem() {
-    const x = Math.floor(Math.random() * CELLS_X);
-    const y = Math.floor(Math.random() * CELLS_Y);
+    // Position de départ aléatoire (en pixels)
+    const startX = Math.random() * (CANVAS_SIZE - GRID_SIZE);
+    const startY = Math.random() * (CANVAS_SIZE - GRID_SIZE);
     const type = itemTypes[Math.floor(Math.random() * itemTypes.length)];
 
-    // Vérifier que l'item n'est pas sur le serpent
-    const onSnake = snake.some(segment => segment.x === x && segment.y === y);
-    if (!onSnake) {
-        items.push({ x, y, type });
-    }
+    // Direction aléatoire
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1.5 + Math.random() * 2; // Vitesse entre 1.5 et 3.5
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed;
+
+    items.push({
+        x: startX,
+        y: startY,
+        type,
+        vx: vx,
+        vy: vy
+    });
 }
 
 // Initialiser plusieurs items au début
@@ -103,26 +113,47 @@ function drawSnake() {
     });
 }
 
+// Mettre à jour les items (mouvement)
+function updateItems() {
+    for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+
+        // Déplacer l'item
+        item.x += item.vx;
+        item.y += item.vy;
+
+        // Vérifier si l'item sort du cadre
+        if (item.x < -GRID_SIZE || item.x > CANVAS_SIZE ||
+            item.y < -GRID_SIZE || item.y > CANVAS_SIZE) {
+            // Supprimer l'item qui sort
+            items.splice(i, 1);
+            // Générer un nouvel item ailleurs
+            generateItem();
+        }
+    }
+}
+
 // Dessiner les items
 function drawItems() {
     items.forEach(item => {
         const img = itemImages[item.type];
+        const offset = (GRID_SIZE - ITEM_SIZE) / 2; // Centrer l'item
         if (img && img.complete) {
             ctx.drawImage(
                 img,
-                item.x * GRID_SIZE + 2,
-                item.y * GRID_SIZE + 2,
-                GRID_SIZE - 4,
-                GRID_SIZE - 4
+                item.x + offset,
+                item.y + offset,
+                ITEM_SIZE,
+                ITEM_SIZE
             );
         } else {
             // Fallback si l'image n'est pas chargée
             ctx.fillStyle = '#ffd43b';
             ctx.fillRect(
-                item.x * GRID_SIZE + 2,
-                item.y * GRID_SIZE + 2,
-                GRID_SIZE - 4,
-                GRID_SIZE - 4
+                item.x + offset,
+                item.y + offset,
+                ITEM_SIZE,
+                ITEM_SIZE
             );
         }
     });
@@ -150,10 +181,35 @@ function updateSnake() {
 
     snake.unshift(head);
 
-    // Vérifier si on mange un item
-    const itemIndex = items.findIndex(item => item.x === head.x && item.y === head.y);
+    // Vérifier si on mange un item (collision avec la tête du serpent)
+    const headPixelX = head.x * GRID_SIZE;
+    const headPixelY = head.y * GRID_SIZE;
+    const itemIndex = items.findIndex(item => {
+        // Vérifier la collision entre la tête du serpent et l'item
+        const itemCenterX = item.x + GRID_SIZE / 2;
+        const itemCenterY = item.y + GRID_SIZE / 2;
+        const headCenterX = headPixelX + GRID_SIZE / 2;
+        const headCenterY = headPixelY + GRID_SIZE / 2;
+
+        const distance = Math.sqrt(
+            Math.pow(itemCenterX - headCenterX, 2) +
+            Math.pow(itemCenterY - headCenterY, 2)
+        );
+
+        // Collision si distance < (taille de la tête + taille de l'item) / 2
+        return distance < (GRID_SIZE + ITEM_SIZE) / 2;
+    });
+
     if (itemIndex !== -1) {
-        // Manger l'item
+        const item = items[itemIndex];
+
+        // Si c'est un virus, on perd
+        if (item.type === 'virus') {
+            gameOver();
+            return;
+        }
+
+        // Manger l'item (pas un virus)
         items.splice(itemIndex, 1);
         score++;
         scoreElement.textContent = score;
@@ -197,6 +253,7 @@ function gameLoop() {
     }
 
     // Mettre à jour et dessiner
+    updateItems();
     updateSnake();
     if (gameRunning) {
         drawItems();

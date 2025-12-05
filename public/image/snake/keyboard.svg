@@ -1,8 +1,8 @@
 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 3000" width="3000" height="3000">
 	<title>WWW (1)</title>
 	<style>
-		.s0 { fill: #000000;stroke: #000000;stroke-miterlimit:10 } 
-		.s1 { fill: none;stroke: #000000;stroke-miterlimit:10;stroke-width: 40 } 
+		.s0 { fill: #ffffff;stroke: #ffffff;stroke-miterlimit:10 } 
+		.s1 { fill: none;stroke: #ffffff;stroke-miterlimit:10;stroke-width: 40 } 
 	</style>
 	<g id="Layer 1">
 		<g id="Layer 1">
