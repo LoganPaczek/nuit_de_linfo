@@ -1,28 +1,27 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
+/* Styles spécifiques pour FlappyEarth - ne modifie pas le body global */
 
 .flappyEarth-container {
     text-align: center;
     padding: 20px;
+    margin: 40px auto;
+    max-width: 600px;
 }
 
 h1 {
     font-size: 2.5em;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.flappy-instruction {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .score-container {
