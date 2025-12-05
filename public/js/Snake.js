@@ -2,6 +2,7 @@ const canvas = document.getElementById('snakeCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const gameOverDiv = document.getElementById('gameOver');
+const gameOverMessage = document.getElementById('gameOverMessage');
 const gameWinDiv = document.getElementById('gameWin');
 const restartBtn = document.getElementById('restartBtn');
 const playAgainBtn = document.getElementById('playAgainBtn');
@@ -201,7 +202,7 @@ function updateSnake() {
     // Vérifier collision avec les parois
     if (head.x < GRID_SIZE / 2 || head.x >= CANVAS_SIZE - GRID_SIZE / 2 ||
         head.y < GRID_SIZE / 2 || head.y >= CANVAS_SIZE - GRID_SIZE / 2) {
-        gameOver();
+        gameOver('Vous avez touché une paroi');
         return;
     }
 
@@ -237,7 +238,7 @@ function updateSnake() {
             Math.pow(head.y - segment.y, 2)
         );
         if (dist < collisionDistance) {
-            gameOver();
+            gameOver('Vous vous êtes mordu la queue !');
             return;
         }
     }
@@ -262,7 +263,7 @@ function updateSnake() {
 
         // Si c'est un virus, on perd
         if (item.type === 'virus') {
-            gameOver();
+            gameOver('Vous avez touché un virus !');
             return;
         }
 
@@ -354,11 +355,12 @@ function startGame() {
 }
 
 // Game Over
-function gameOver() {
+function gameOver(message = 'Vous avez touché une paroi') {
     gameRunning = false;
     if (gameLoopId) {
         clearTimeout(gameLoopId);
     }
+    gameOverMessage.textContent = message;
     gameOverDiv.classList.remove('hidden');
 }
 
