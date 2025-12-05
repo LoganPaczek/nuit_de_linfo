@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 20px;
+}
+
+.snake-container {
+    text-align: center;
+    padding: 20px;
+    max-width: 100%;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-info {
+    margin-bottom: 20px;
+}
+
+.score {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.controls-info {
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+#snakeCanvas {
+    border: 3px solid white;
+    border-radius: 8px;
+    background: #1a1a1a;
+    display: block;
+    margin: 20px auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.game-over,
+.game-win {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+    border: 2px solid white;
+}
+
+.game-over h2,
+.game-win h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #ff6b6b;
+}
+
+.game-win h2 {
+    color: #51cf66;
+}
+
+.game-over p,
+.game-win p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.game-over button,
+.game-win button {
+    padding: 12px 30px;
+    font-size: 1.1em;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.game-over button:hover,
+.game-win button:hover {
+    background: #5568d3;
+}
+
+.hidden {
+    display: none;
+}
