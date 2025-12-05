@@ -1,0 +1,50 @@
+/* Overlay semi-transparent */
+.captcha-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Popup centré */
+.captcha-popup {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    min-width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Captcha texte */
+.captcha-code {
+    font-size: 32px;
+    font-weight: bold;
+    background: #eee;
+    padding: 10px 20px;
+    letter-spacing: 4px;
+    border-radius: 5px;
+    user-select: none;
+    margin-bottom: 15px;
+}
+
+/* Champ de saisie */
+.captcha-input {
+    padding: 8px;
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+/* Bouton */
+.captcha-button {
+    padding: 8px 16px;
+    cursor: pointer;
+}
