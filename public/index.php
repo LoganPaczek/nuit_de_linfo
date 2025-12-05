@@ -99,7 +99,12 @@ $uc = $_GET['uc'];
 			}
 
 			case "Inscription":{
-				include("../src/Views/vue_inscription.php");
+				include("../src/controleurs/c_inscription.php");
+				break;
+			}
+
+			case "Connexion":{
+				include("../src/controleurs/c_connexion.php");
 				break;
 			}
 
