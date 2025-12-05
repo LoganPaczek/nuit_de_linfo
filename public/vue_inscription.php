@@ -6,6 +6,7 @@
     <title>Document</title>
 
     <script src="Inscription.js" defer></script>
+    <script src="js/captcha.js" defer></script>
     <link rel="stylesheet" href="Style_Inscription.css">
 
 </head>
@@ -63,6 +64,10 @@
 
     <button type="submit">Valider</button>
 </form>
-
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    ecouterSouris(); // active l'écoute des clics
+});
+</script>
 </body>
 </html>
