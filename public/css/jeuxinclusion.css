@@ -1,0 +1,122 @@
+/* Conteneur principal RESPONSIVE */
+#gameTable, [id*="game"], .jeu-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 10px;
+    margin: 0;
+}
+
+/* Titre responsive */
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+    font-size: clamp(1.5em, 5vw, 2.5em);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Tableau FULL RESPONSIVE */
+table { 
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    table-layout: fixed; /* Colonnes égales */
+}
+
+/* Colonnes égales et flexibles */
+td { 
+    padding: clamp(10px, 3vw, 20px) clamp(5px, 2vw, 15px); 
+    text-align: center; 
+    border: 2px solid #e0e0e0;
+    vertical-align: middle;
+    width: 33.33%; /* 3 colonnes égales */
+}
+
+/* Boutons FULL RESPONSIVE */
+button { 
+    width: 100%;
+    height: clamp(50px, 12vw, 70px);
+    padding: 0;
+    cursor: pointer; 
+    border: none; 
+    border-radius: 12px; 
+    font-size: clamp(12px, 3vw, 16px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.proprietaire { 
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+    color: #1976d2;
+}
+
+.alternative { 
+    background: linear-gradient(145deg, #e8f5e8, #c8e6c9);
+    color: #2e7d32;
+}
+
+button:hover { 
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Résultats */
+.result { 
+    font-weight: 700; 
+    font-size: clamp(14px, 3.5vw, 18px);
+    min-height: clamp(50px, 12vw, 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none !important;                    /* ← SUPPRIME TOUS contours */
+    border-left: 5px solid #ddd;               /* ← SEULEMENT gauche */
+    border-radius: 0 12px 12px 0;              /* ← Coins droits arrondis */
+    background: linear-gradient(145deg, #f8f9fa, #ffffff);
+}
+
+.positive { 
+    color: #2e7d32; 
+    background: linear-gradient(145deg, #e8f5e8, #c8e6c9) !important;
+    border-left: 5px solid #4caf50;
+    animation: pulse 1s ease-in-out;
+}
+
+.negatif { 
+    color: #d32f2f; 
+    background: linear-gradient(145deg, #ffebee, #ffcdd2) !important;
+    border-left: 5px solid #f44336;
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Animations */
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+/* MOBILE PREMIER - S'adapte à TOUTES les tailles */
+@media (max-width: 600px) {
+    td { padding: 8px 4px; }
+    button { height: 45px; font-size: 11px; }
+    h1 { margin-bottom: 15px; }
+}
+
+@media (max-width: 400px) {
+    body { padding: 5px; }
+    table { border-radius: 15px; }
+}
