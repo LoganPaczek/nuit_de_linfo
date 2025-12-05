@@ -7,25 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <nav>
-        <div class="logo_container">
-             <img src="./image/logo.png">
-        </div>
-        <div class="nav_links_container">
-            <a href="#">Accueil</a>
-            <a href="#">Inclusion</a>
-            <a href="#">Responsabilité</a>
-            <a href="#">Durabilité</a>
-            <a href="#">Inscription</a>
-            <a href="#">Connexion</a>
-        </div>
 
-
-        <div class="nav_log_container">
-             <a href="index.php?uc=Accueil&action=Connexion">Se connecter </a>
-            <a href="index.php?uc=Accueil&action=Sinscrire">S'isncrire </a>
-        </div>
-    </nav>
     <div class="accueil_container">
         <div class="left_part">
                         <p> La démarche NIRD est une initiative portée par un collectif d’enseignants de la Forge des communs numériques éducatifs, engagée pour un numérique libre, éthique et écologique dans les établissements scolaires.

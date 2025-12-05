@@ -12,13 +12,13 @@ switch($action){
 		break;
 	}
 	case 'Sinscrire':{
-        include("Vues/vue_inscription.php");
+        include("../src/Views/vue_inscription.php");
 			break;	
 	}
 
 	
 	default :{
-		include("Vues/vue_Accueil.php");
+		include("../src/Views/vue_Accueil.php");
 		break;
 	}
 }

@@ -1,0 +1,31 @@
+.accueil_container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.accueil_container .left_part{
+    width: 50%;
+    padding-left: 16px;
+    border-radius: 20px;
+    box-shadow: 2px 4px 0px #aaa;
+}
+
+.accueil_container .right_part{
+    width: 40%;
+    padding: 0px 16px;
+    border-radius: 20px;
+    box-shadow: -2px 4px 0px #aaa;
+}
+
+.accueil_container .right_part .image{
+    display: flex;
+    justify-content: center;
+}
+
+.accueil_container .right_part .image img{
+    width: 30%;
+}
+/* div{
+    border-radius: 20%;
+    box-shadow: 8px 8px 0px #aaa;
+} */
