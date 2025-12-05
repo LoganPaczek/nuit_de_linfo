@@ -3,7 +3,7 @@
             <img src="./images/logo.png">
     </div>
     <div class="nav_links_container">
-        <a href="#">Accueil</a>
+        <a href="index.php?uc=Accueil">Accueil</a>
         <a href="index.php?uc=Linux">Linux</a>
         <a href="index.php?uc=Inclusion">Inclusion</a>
         <a href="index.php?uc=Responsabilité">Responsabilité</a>
