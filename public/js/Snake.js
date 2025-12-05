@@ -11,6 +11,7 @@ const GRID_SIZE = 20;
 const CANVAS_SIZE = 400;
 const WIN_SCORE = 10;
 const ITEM_SIZE = 28; // Taille des items (plus grande que GRID_SIZE)
+const SNAKE_SPEED = 2; // Vitesse du serpent en pixels par frame
 
 // Calculer le nombre de cellules
 const CELLS_X = Math.floor(CANVAS_SIZE / GRID_SIZE);
@@ -20,9 +21,9 @@ canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
 
 // État du jeu
-let snake = [{ x: 10, y: 10 }];
-let direction = { x: 1, y: 0 };
-let nextDirection = { x: 1, y: 0 };
+let snake = [{ x: 200, y: 200 }]; // Positions en pixels
+let targetX = 200; // Position cible X en pixels
+let targetY = 200; // Position cible Y en pixels
 let items = [];
 let score = 0;
 let gameRunning = false;
@@ -72,7 +73,7 @@ function generateItem() {
 
     // Direction aléatoire
     const angle = Math.random() * Math.PI * 2;
-    const speed = 1.5 + Math.random() * 2; // Vitesse entre 1.5 et 3.5
+    const speed = 0.5 + Math.random() * 0.8; // Vitesse entre 0.5 et 1.3 (plus lent)
     const vx = Math.cos(angle) * speed;
     const vy = Math.sin(angle) * speed;
 
@@ -96,21 +97,36 @@ function initItems() {
 
 // Dessiner le serpent
 function drawSnake() {
-    ctx.fillStyle = '#51cf66';
-    snake.forEach((segment, index) => {
-        if (index === 0) {
-            // Tête du serpent
-            ctx.fillStyle = '#69db7c';
-        } else {
-            ctx.fillStyle = '#51cf66';
-        }
-        ctx.fillRect(
-            segment.x * GRID_SIZE,
-            segment.y * GRID_SIZE,
-            GRID_SIZE - 2,
-            GRID_SIZE - 2
-        );
-    });
+    if (snake.length < 1) return;
+
+    const radius = GRID_SIZE / 2;
+    const lineWidth = GRID_SIZE;
+
+    // Dessiner le corps comme une ligne continue épaisse
+    ctx.beginPath();
+    ctx.moveTo(snake[0].x, snake[0].y);
+
+    for (let i = 1; i < snake.length; i++) {
+        ctx.lineTo(snake[i].x, snake[i].y);
+    }
+
+    // Style de ligne avec extrémités arrondies
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = '#51cf66';
+    ctx.stroke();
+
+    // Dessiner la tête (cercle plus clair)
+    ctx.beginPath();
+    ctx.arc(snake[0].x, snake[0].y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = '#69db7c';
+    ctx.fill();
+
+    // Contour de la tête
+    ctx.strokeStyle = '#3d9b4f';
+    ctx.lineWidth = 2;
+    ctx.stroke();
 }
 
 // Mettre à jour les items (mouvement)
@@ -161,39 +177,80 @@ function drawItems() {
 
 // Mettre à jour le serpent
 function updateSnake() {
-    direction = { ...nextDirection };
-
     const head = { ...snake[0] };
-    head.x += direction.x;
-    head.y += direction.y;
+
+    // Calculer la direction vers la cible
+    const dx = targetX - head.x;
+    const dy = targetY - head.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Si on est proche de la cible, on s'arrête, sinon on se déplace vers elle
+    if (distance > SNAKE_SPEED) {
+        // Normaliser la direction et multiplier par la vitesse
+        const moveX = (dx / distance) * SNAKE_SPEED;
+        const moveY = (dy / distance) * SNAKE_SPEED;
+
+        head.x += moveX;
+        head.y += moveY;
+    } else {
+        // On est arrivé à la cible
+        head.x = targetX;
+        head.y = targetY;
+    }
 
     // Vérifier collision avec les parois
-    if (head.x < 0 || head.x >= CELLS_X || head.y < 0 || head.y >= CELLS_Y) {
+    if (head.x < GRID_SIZE / 2 || head.x >= CANVAS_SIZE - GRID_SIZE / 2 ||
+        head.y < GRID_SIZE / 2 || head.y >= CANVAS_SIZE - GRID_SIZE / 2) {
         gameOver();
         return;
     }
 
-    // Vérifier collision avec soi-même
-    if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-        gameOver();
-        return;
+    // Faire suivre chaque segment au précédent avec une distance fixe (collé)
+    const segmentDistance = GRID_SIZE;
+    for (let i = 1; i < snake.length; i++) {
+        const prevSegment = snake[i - 1];
+        const currentSegment = snake[i];
+
+        const dx = currentSegment.x - prevSegment.x;
+        const dy = currentSegment.y - prevSegment.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // Toujours maintenir la distance exacte (collé)
+        if (dist !== segmentDistance) {
+            // Normaliser et ajuster la position pour être exactement à la bonne distance
+            const angle = Math.atan2(dy, dx);
+            currentSegment.x = prevSegment.x + Math.cos(angle) * segmentDistance;
+            currentSegment.y = prevSegment.y + Math.sin(angle) * segmentDistance;
+        }
     }
 
-    snake.unshift(head);
+    // Mettre à jour la tête
+    snake[0] = head;
+
+    // Vérifier collision avec soi-même (avec une distance minimale, mais seulement après quelques frames)
+    const collisionDistance = GRID_SIZE * 0.7;
+    // Ignorer les 2 premiers segments car ils sont toujours proches de la tête au début
+    for (let i = 3; i < snake.length; i++) {
+        const segment = snake[i];
+        const dist = Math.sqrt(
+            Math.pow(head.x - segment.x, 2) +
+            Math.pow(head.y - segment.y, 2)
+        );
+        if (dist < collisionDistance) {
+            gameOver();
+            return;
+        }
+    }
 
     // Vérifier si on mange un item (collision avec la tête du serpent)
-    const headPixelX = head.x * GRID_SIZE;
-    const headPixelY = head.y * GRID_SIZE;
     const itemIndex = items.findIndex(item => {
         // Vérifier la collision entre la tête du serpent et l'item
         const itemCenterX = item.x + GRID_SIZE / 2;
         const itemCenterY = item.y + GRID_SIZE / 2;
-        const headCenterX = headPixelX + GRID_SIZE / 2;
-        const headCenterY = headPixelY + GRID_SIZE / 2;
 
         const distance = Math.sqrt(
-            Math.pow(itemCenterX - headCenterX, 2) +
-            Math.pow(itemCenterY - headCenterY, 2)
+            Math.pow(itemCenterX - head.x, 2) +
+            Math.pow(itemCenterY - head.y, 2)
         );
 
         // Collision si distance < (taille de la tête + taille de l'item) / 2
@@ -214,6 +271,10 @@ function updateSnake() {
         score++;
         scoreElement.textContent = score;
 
+        // Ajouter un segment au serpent (grandir)
+        const tail = snake[snake.length - 1];
+        snake.push({ x: tail.x, y: tail.y });
+
         // Générer un nouvel item
         generateItem();
 
@@ -222,10 +283,8 @@ function updateSnake() {
             winGame();
             return;
         }
-    } else {
-        // Retirer la queue si on n'a pas mangé
-        snake.pop();
     }
+    // Ne pas retirer la queue si on n'a pas mangé - garder la taille constante
 }
 
 // Boucle de jeu
@@ -260,17 +319,30 @@ function gameLoop() {
         drawSnake();
     }
 
-    // Continuer la boucle
+    // Continuer la boucle (plus rapide pour un mouvement fluide)
     if (gameRunning) {
-        gameLoopId = setTimeout(gameLoop, 150);
+        gameLoopId = setTimeout(gameLoop, 16); // ~60 FPS
     }
 }
 
 // Démarrer le jeu
 function startGame() {
-    snake = [{ x: 10, y: 10 }];
-    direction = { x: 1, y: 0 };
-    nextDirection = { x: 1, y: 0 };
+    // Initialiser le serpent avec 4 segments alignés horizontalement
+    const startX = 200;
+    const startY = 200;
+    const segmentSpacing = GRID_SIZE; // Espacement entre les segments
+
+    snake = [];
+    for (let i = 0; i < 4; i++) {
+        snake.push({
+            x: startX - (i * segmentSpacing),
+            y: startY
+        });
+    }
+
+    // Positionner la cible légèrement à droite pour que le serpent commence à bouger
+    targetX = startX + 30;
+    targetY = startY;
     score = 0;
     scoreElement.textContent = score;
     gameRunning = true;
@@ -303,26 +375,21 @@ function winGame() {
 document.addEventListener('keydown', (e) => {
     if (!gameRunning) return;
 
+    const head = snake[0];
+    const moveDistance = 50; // Distance de déplacement en pixels
+
     switch (e.key) {
         case 'ArrowUp':
-            if (direction.y === 0) {
-                nextDirection = { x: 0, y: -1 };
-            }
+            targetY = Math.max(GRID_SIZE / 2, head.y - moveDistance);
             break;
         case 'ArrowDown':
-            if (direction.y === 0) {
-                nextDirection = { x: 0, y: 1 };
-            }
+            targetY = Math.min(CANVAS_SIZE - GRID_SIZE / 2, head.y + moveDistance);
             break;
         case 'ArrowLeft':
-            if (direction.x === 0) {
-                nextDirection = { x: -1, y: 0 };
-            }
+            targetX = Math.max(GRID_SIZE / 2, head.x - moveDistance);
             break;
         case 'ArrowRight':
-            if (direction.x === 0) {
-                nextDirection = { x: 1, y: 0 };
-            }
+            targetX = Math.min(CANVAS_SIZE - GRID_SIZE / 2, head.x + moveDistance);
             break;
     }
 });
@@ -335,34 +402,9 @@ canvas.addEventListener('mousemove', (e) => {
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // Position de la tête du serpent en pixels
-    const headX = snake[0].x * GRID_SIZE + GRID_SIZE / 2;
-    const headY = snake[0].y * GRID_SIZE + GRID_SIZE / 2;
-
-    // Calculer la direction vers la souris
-    const dx = mouseX - headX;
-    const dy = mouseY - headY;
-
-    // Déterminer la direction principale (horizontal ou vertical)
-    if (Math.abs(dx) > Math.abs(dy)) {
-        // Mouvement horizontal
-        if (dx > 0 && direction.x === 0) {
-            // Aller à droite
-            nextDirection = { x: 1, y: 0 };
-        } else if (dx < 0 && direction.x === 0) {
-            // Aller à gauche
-            nextDirection = { x: -1, y: 0 };
-        }
-    } else {
-        // Mouvement vertical
-        if (dy > 0 && direction.y === 0) {
-            // Aller en bas
-            nextDirection = { x: 0, y: 1 };
-        } else if (dy < 0 && direction.y === 0) {
-            // Aller en haut
-            nextDirection = { x: 0, y: -1 };
-        }
-    }
+    // Limiter la position cible dans les limites du canvas
+    targetX = Math.max(GRID_SIZE / 2, Math.min(CANVAS_SIZE - GRID_SIZE / 2, mouseX));
+    targetY = Math.max(GRID_SIZE / 2, Math.min(CANVAS_SIZE - GRID_SIZE / 2, mouseY));
 });
 
 // Boutons
