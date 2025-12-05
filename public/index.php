@@ -39,7 +39,7 @@ $uc = $_GET['uc'];
 	<?php
 		switch($uc){
 			case 'Accueil':{
-				include("../src/controleurs/c_acueil.php");
+				include("../src/Views/vue_Accueil.php");
 				break;
 			}
 
