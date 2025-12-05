@@ -10,3 +10,4 @@ if (!isset($_SESSION['sudoku_won']) || $_SESSION['sudoku_won'] !== true) {
 include("../src/Views/Vue_Inclusion.php");
 ?>
 
+

@@ -10,3 +10,4 @@ if (!isset($_SESSION['flappy_earth_won']) || $_SESSION['flappy_earth_won'] !== t
 include("../src/Views/Vue_Durabilite.php");
 ?>
 
+
